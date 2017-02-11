@@ -1,0 +1,15 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+                "module": "es2015", 
+                "target": "es5",
+                "outFile": "dist/app.js",
+                "sourceMap": true,
+                "declaration": true,
+                "removeComments": true,
+                "watch": true
+            },
+    "files": [
+        "src/app.ts"
+    ]
+}
