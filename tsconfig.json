@@ -1,0 +1,14 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+                "module": "commonjs", 
+                "target": "es5",
+                "sourceMap": false,
+                "declaration": false,
+                "removeComments": true,
+                "outDir": "dist"
+            },
+    "files": [
+        "src/app.ts"
+    ]
+}
