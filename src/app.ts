@@ -1,4 +1,4 @@
-import * as restify from "restify";
+import * as restify from "../node_modules/@types/restify/index";
 import * as builder from "../node_modules/botbuilder/lib/botbuilder";
 
 var connector = new builder.ConsoleConnector().listen();
