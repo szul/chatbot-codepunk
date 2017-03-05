@@ -6,9 +6,10 @@
                 "sourceMap": false,
                 "declaration": false,
                 "removeComments": true,
-                "outDir": "dist"
+                "outDir": "./dist",
+                "allowJs": true
             },
     "files": [
-        "src/app.ts"
+        "./lib/app.ts"
     ]
 }
