@@ -4,8 +4,11 @@
   "description": "Experimental bot for codepunk.io",
   "main": "dest/app.js",
   "dependencies": {
+    "@types/request": "0.0.40",
     "@types/restify": "^2.0.38",
     "botbuilder": "^3.6.0",
+    "feedparser": "^2.1.0",
+    "request": "^2.80.0",
     "restify": "^4.3.0"
   },
   "devDependencies": {},
