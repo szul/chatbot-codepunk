@@ -63,7 +63,7 @@ function launchBot(): void {
 
     bot.dialog('/', intents);
 
-    intents.matches(/^version/i, function (session) {
+    intents.matches(/^version/i, (session) => {
         session.send('#codepunk bot alpha v.0.0.1');
     });
 
@@ -72,6 +72,34 @@ function launchBot(): void {
             let latest: Post = Posts[0];
             let postType = (latest.enclosure == null) ? "an article" : "a podcast";
             session.send('The latest on #codepunk is %s titled "%s" which was published on %s', postType, latest.title, latest.pubdate);
+            session.send('Here is the link: %s', latest.link);
+        }
+    ]);
+
+    intents.matches(/^latest podcast|latest episode/i, [
+        function (session) {
+            let latest: Post = null;
+            Posts.forEach((val: Post, idx: number) => {
+                if(val.enclosure != null) {
+                    latest = val;
+                    return;
+                }
+            });
+            session.send('The latest podcast episode on #codepunk is titled "%s" which was published on %s', latest.title, latest.pubdate);
+            session.send('Here is the link: %s', latest.link);
+        }
+    ]);
+
+    intents.matches(/^latest article|last article|latest blog post|last blog post/i, [ //You can make all of these more regex-y
+        function (session) {
+            let latest: Post = null; //since you're using this more than once, refactor
+            Posts.forEach((val: Post, idx: number) => {
+                if(val.enclosure == null) {
+                    latest = val;
+                    return;
+                }
+            });
+            session.send('The latest blog post on #codepunk is titled "%s" which was published on %s', latest.title, latest.pubdate);
             session.send('Here is the link: %s', latest.link);
         }
     ]);
