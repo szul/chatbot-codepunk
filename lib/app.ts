@@ -88,7 +88,7 @@ function getEnclosure(item: any): Enclosure {
 
 function launchServer(callback): void {
     var server = restify.createServer();
-    server.listen(process.env.port || process.env.PORT || 3978, function () {
+    server.listen(process.env.port || process.env.PORT || 3978, () => {
         console.log('%s listening to %s', server.name, server.url); 
     });
     callback(server);    
@@ -113,25 +113,15 @@ function launchBot(server): void {
         session.send('#codepunk bot alpha v.0.0.1');
     });
 
-    intents.matches(/^what's new|what's the latest/i, [
-        function (session) {
-            let latest: Post = Posts[0];
-            let postType = (latest.enclosure == null) ? "an article" : "a podcast";
-            session.send('The latest on #codepunk is %s titled "%s" which was published on %s', postType, latest.title, latest.pubdate);
-            //session.send('Here is the link: %s', latest.link);
-            session.send(new builder.Message(session).addAttachment(createThumbnailCard(session, latest.title, latest.link, latest.image.url)));
-        }
-    ]);
-
     intents.matches(/^latest podcast|latest episode/i, [
         function (session) {
             let latest: Post = null;
-            Posts.reverse().forEach((val: Post, idx: number) => {
-                if(val.enclosure != null && val.enclosure.url != null) {
-                    latest = val;
-                    return;
+            for(let i = 0; i < Posts.length; i++) {
+                if(Posts[i].enclosure != null && Posts[i].enclosure.url != null) {
+                    latest = Posts[i];
+                    break;
                 }
-            });
+            }
             session.send('The latest podcast episode on #codepunk is titled "%s" which was published on %s', latest.title, latest.pubdate);
             //session.send('Here is the link: %s', latest.link);
             session.send(new builder.Message(session).addAttachment(createAudioCard(session, latest.title, latest.link, latest.enclosure.url, latest.image.url)));
@@ -141,13 +131,23 @@ function launchBot(server): void {
     intents.matches(/^latest article|last article|latest blog post|last blog post/i, [ //You can make all of these more regex-y
         function (session) {
             let latest: Post = null; //since you're using this more than once, refactor
-            Posts.reverse().forEach((val: Post, idx: number) => {
-                if(val.image != null && val.image.url != null) {
-                    latest = val;
-                    return;
+            for(let i = 0; i < Posts.length; i++) {
+                if(Posts[i].image != null && Posts[i].image.url != null) {
+                    latest = Posts[i];
+                    break;
                 }
-            });
+            }
             session.send('The latest blog post on #codepunk is titled "%s" which was published on %s', latest.title, latest.pubdate);
+            //session.send('Here is the link: %s', latest.link);
+            session.send(new builder.Message(session).addAttachment(createThumbnailCard(session, latest.title, latest.link, latest.image.url)));
+        }
+    ]);
+
+    intents.matches(/^what's new|^what's the latest/i, [
+        function (session) {
+            let latest: Post = Posts[0];
+            let postType = (latest.enclosure == null) ? "an article" : "a podcast";
+            session.send('The latest on #codepunk is %s titled "%s" which was published on %s', postType, latest.title, latest.pubdate);
             //session.send('Here is the link: %s', latest.link);
             session.send(new builder.Message(session).addAttachment(createThumbnailCard(session, latest.title, latest.link, latest.image.url)));
         }
