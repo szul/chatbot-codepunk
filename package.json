@@ -14,7 +14,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "postinstall": "node_modules/.bin/tsc -p",
+    "postinstall": "node_modules/.bin/tsc",
     "start": "node dest/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
