@@ -9,10 +9,12 @@
     "botbuilder": "^3.6.0",
     "feedparser": "^2.1.0",
     "request": "^2.80.0",
-    "restify": "^4.3.0"
+    "restify": "^4.3.0",
+    "typescript": "^2.2.1"
   },
   "devDependencies": {},
   "scripts": {
+    "start": "node dest/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
