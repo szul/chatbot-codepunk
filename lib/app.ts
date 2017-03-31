@@ -143,7 +143,7 @@ function launchBot(server): void {
         }
     ]);
 
-    intents.matches(/^what's new|^what's up|^whats new|whats up/i, [
+    intents.matches(/^what's new|^what's the latest/i, [
         function (session) {
             let latest: Post = Posts[0];
             let postType = (latest.enclosure == null) ? "an article" : "a podcast";
