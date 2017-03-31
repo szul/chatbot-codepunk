@@ -1,6 +1,6 @@
 {
   "name": "codepunk.bot.node",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Experimental bot for codepunk.io",
   "main": "server.js",
   "dependencies": {

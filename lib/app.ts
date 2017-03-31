@@ -108,7 +108,7 @@ function launchBot(server): void {
     bot.dialog('/', intents);
 
     intents.matches(/^version/i, (session) => {
-        session.send('#codepunk bot alpha v.0.0.1');
+        session.send('#codepunk bot alpha v.0.0.3'); //load from package.json file
     });
 
     intents.matches(/latest podcast|latest episode|newest podcast|newest episode/i, [
@@ -201,6 +201,6 @@ function createThumbnailCard(session: any, title: string, url: string, imageUrl:
             builder.CardImage.create(session, imageUrl)
         ])
         .buttons([
-            builder.CardAction.openUrl(session, url, "Read more...")
+            builder.CardAction.openUrl(session, url.replace("http://", "https://"), "Read more...")
         ]);
 }
