@@ -201,6 +201,6 @@ function createThumbnailCard(session: any, title: string, linkUrl: string, image
             builder.CardImage.create(session, imageUrl)
         ])
         .buttons([
-            builder.CardAction.openUrl(session, linkUrl, "Read more...")
+            builder.CardAction.openUrl(session, linkUrl.replace("http://", "https://"), "Read more...")
         ]);
 }
