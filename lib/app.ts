@@ -103,8 +103,6 @@ function launchBot(server): void {
     var bot = new builder.UniversalBot(connector);
     server.post('/api/messages', connector.listen());
 
-    //var connector = new builder.ConsoleConnector().listen();
-    //var bot = new builder.UniversalBot(connector);
     var intents = new builder.IntentDialog();
 
     bot.dialog('/', intents);
@@ -113,7 +111,7 @@ function launchBot(server): void {
         session.send('#codepunk bot alpha v.0.0.1');
     });
 
-    intents.matches(/^latest podcast|latest episode/i, [
+    intents.matches(/latest podcast|latest episode|newest podcast|newest episode/i, [
         function (session) {
             let latest: Post = null;
             for(let i = 0; i < Posts.length; i++) {
@@ -128,7 +126,7 @@ function launchBot(server): void {
         }
     ]);
 
-    intents.matches(/^latest article|last article|latest blog post|last blog post/i, [ //You can make all of these more regex-y
+    intents.matches(/latest article|last article|latest blog post|last blog post|newest blog post|newest article/i, [ //You can make all of these more regex-y
         function (session) {
             let latest: Post = null; //since you're using this more than once, refactor
             for(let i = 0; i < Posts.length; i++) {
@@ -138,17 +136,15 @@ function launchBot(server): void {
                 }
             }
             session.send('The latest blog post on #codepunk is titled "%s" which was published on %s', latest.title, latest.pubdate);
-            //session.send('Here is the link: %s', latest.link);
             session.send(new builder.Message(session).addAttachment(createThumbnailCard(session, latest.title, latest.link, latest.image.url)));
         }
     ]);
 
-    intents.matches(/^what's new|^what's up|^whats new|whats up/i, [
+    intents.matches(/^what's new|^what's up|^whats new|^whats up/i, [
         function (session) {
             let latest: Post = Posts[0];
             let postType = (latest.enclosure == null) ? "an article" : "a podcast";
             session.send('The latest on #codepunk is %s titled "%s" which was published on %s', postType, latest.title, latest.pubdate);
-            //session.send('Here is the link: %s', latest.link);
             session.send(new builder.Message(session).addAttachment(createThumbnailCard(session, latest.title, latest.link, latest.image.url)));
         }
     ]);
@@ -205,6 +201,6 @@ function createThumbnailCard(session: any, title: string, url: string, imageUrl:
             builder.CardImage.create(session, imageUrl)
         ])
         .buttons([
-            builder.CardAction.openUrl(session, "url", "Read more...")
+            builder.CardAction.openUrl(session, url, "Read more...")
         ]);
 }
