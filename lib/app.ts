@@ -4,6 +4,17 @@ import * as request from "request";
 
 var Posts: Array<Post> = [];
 
+enum PostType {
+     Article = 1
+    ,Enclosure = 2
+    ,Author = 3
+}
+
+enum Author {
+     Ahern = 1
+    ,Szul = 2
+}
+
 interface Image {
       url: string
     , title?: string
@@ -95,7 +106,28 @@ function launchServer(callback): void {
 }
 
 function launchBot(server): void {
-
+    function getPost(postType: PostType, author?: Author): Post {
+        let latest: Post = null;
+        for(let i = 0; i < Posts.length; i++) {
+            if(postType === PostType.Enclosure && Posts[i].enclosure != null && Posts[i].enclosure.url != null) {
+                latest = Posts[i];
+                break;
+            }
+            else if(postType === PostType.Article && Posts[i].image != null && Posts[i].image.url != null) {
+                latest = Posts[i];
+                break;
+            }
+            else if(postType === PostType.Author && author === Author.Ahern && Posts[i].author.toLowerCase().indexOf("ahern") !== -1) {
+                latest = Posts[i];
+                break;
+            }
+            else if(postType === PostType.Author && author === Author.Szul && Posts[i].author.toLowerCase().indexOf("szul") !== -1) {
+                latest = Posts[i];
+                break;
+            }
+        }
+        return latest;
+    }
     var connector = new builder.ChatConnector({
         appId: process.env.MICROSOFT_APP_ID,
         appPassword: process.env.MICROSOFT_APP_PASSWORD
@@ -108,70 +140,73 @@ function launchBot(server): void {
     bot.dialog('/', intents);
 
     intents.matches(/^version/i, (session) => {
-        session.send('#codepunk bot alpha v.0.0.2');
+        session.send('#codepunk bot alpha v.0.0.3'); //Need to load from package.json
     });
 
+    intents.matches(/from bill|by bill/i, [
+        (session) => {
+            let latest: Post = getPost(PostType.Author, Author.Ahern);
+            session.send('The latest from Bill on #codepunk is titled "%s" and was published on %s', latest.title, latest.pubdate);
+            session.send(new builder.Message(session).addAttachment(createThumbnailCard(session, latest.title, latest.link, latest.image.url)));
+        }
+    ]);
+
+    intents.matches(/from michael|by michael/i, [
+        (session) => {
+            let latest: Post = getPost(PostType.Author, Author.Szul);
+            session.send('The latest from Michael on #codepunk is titled "%s" and was published on %s', latest.title, latest.pubdate);
+            session.send(new builder.Message(session).addAttachment(createThumbnailCard(session, latest.title, latest.link, latest.image.url)));
+        }
+    ]);
+
     intents.matches(/latest podcast|latest episode|newest podcast|newest episode/i, [
-        function (session) {
-            let latest: Post = null;
-            for(let i = 0; i < Posts.length; i++) {
-                if(Posts[i].enclosure != null && Posts[i].enclosure.url != null) {
-                    latest = Posts[i];
-                    break;
-                }
-            }
-            session.send('The latest podcast episode on #codepunk is titled "%s" which was published on %s', latest.title, latest.pubdate);
-            //session.send('Here is the link: %s', latest.link);
+        (session) => {
+            let latest: Post = getPost(PostType.Enclosure);
+            session.send('The latest podcast episode on #codepunk is titled "%s" and was published on %s', latest.title, latest.pubdate);
             session.send(new builder.Message(session).addAttachment(createAudioCard(session, latest.title, latest.link, latest.enclosure.url, latest.image.url)));
         }
     ]);
 
     intents.matches(/latest article|last article|latest blog post|last blog post|newest blog post|newest article/i, [ //You can make all of these more regex-y
-        function (session) {
-            let latest: Post = null; //since you're using this more than once, refactor
-            for(let i = 0; i < Posts.length; i++) {
-                if(Posts[i].image != null && Posts[i].image.url != null) {
-                    latest = Posts[i];
-                    break;
-                }
-            }
-            session.send('The latest blog post on #codepunk is titled "%s" which was published on %s', latest.title, latest.pubdate);
+        (session) => {
+            let latest: Post = getPost(PostType.Article);
+            session.send('The latest blog post on #codepunk is titled "%s" and was published on %s', latest.title, latest.pubdate);
             session.send(new builder.Message(session).addAttachment(createThumbnailCard(session, latest.title, latest.link, latest.image.url)));
         }
     ]);
 
     intents.matches(/^what's new|^what's up|^whats new|^whats up/i, [
-        function (session) {
+        (session) => {
             let latest: Post = Posts[0];
             let postType = (latest.enclosure == null) ? "an article" : "a podcast";
-            session.send('The latest on #codepunk is %s titled "%s" which was published on %s', postType, latest.title, latest.pubdate);
+            session.send('The latest on #codepunk is %s titled "%s" and was published on %s', postType, latest.title, latest.pubdate);
             session.send(new builder.Message(session).addAttachment(createThumbnailCard(session, latest.title, latest.link, latest.image.url)));
         }
     ]);
 
     intents.onDefault([
-        function (session, args, next) {
+        (session, args, next) => {
             if (!session.userData.name) {
                 session.beginDialog('/init');
             } else {
                 next();
             }
         },
-        function (session, results) {
-            session.send('Hello, user %s. What may we help you with? End of line.', session.userData.name);
+        (session, results) => {
+            session.send('Hello, %s. What may we help you with?', session.userData.name);
         }
     ]);
 
     bot.dialog('/init', [
-        function (session) {
+        (session) => {
             if(!session.userData.name) {
-                builder.Prompts.text(session, 'What may we call you? End of line.');
+                builder.Prompts.text(session, 'What may we call you?');
             }
             else {
-                session.send('Input not recognized user %s. End of line.', session.userData.name);
+                session.send('Input not recognized user %s.', session.userData.name);
             }
         },
-        function (session, results) {
+        (session, results) => {
             session.userData.name = results.response;
             session.endDialog();
         }
