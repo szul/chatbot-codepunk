@@ -2,7 +2,7 @@ import * as restify from "restify";
 import * as builder from "botbuilder";
 import * as request from "request";
 
-var Posts: Array<Post> = [];
+const FEEDURL = "https://codepunk.io/rss/";
 
 enum PostType {
      Article = 1
@@ -37,9 +37,9 @@ interface Post {
     , enclosure?: Enclosure
 }
 
+var Posts: Array<Post> = [];
 var feedparser = require('feedparser');
-
-var feed = request("https://codepunk.io/rss/");
+var feed = request(FEEDURL);
 var parsed = new feedparser();
 
 feed.on("response", (resp) => {
@@ -140,13 +140,13 @@ function launchBot(server): void {
     bot.dialog('/', intents);
 
     intents.matches(/^version/i, (session) => {
-        session.send('#codepunk bot alpha v.0.0.3'); //Need to load from package.json
+        session.send("#codepunk bot alpha v.0.0.5"); //Need to load from package.json
     });
 
     intents.matches(/from bill|by bill/i, [
         (session) => {
             let latest: Post = getPost(PostType.Author, Author.Ahern);
-            session.send('The latest from Bill on #codepunk is titled "%s" and was published on %s', latest.title, latest.pubdate);
+            session.send('The latest from Bill on #codepunk is titled "%s" and was published on %s', latest.title, latest.pubdate.toDateString());
             session.send(new builder.Message(session).addAttachment(createThumbnailCard(session, latest.title, latest.link, latest.image.url)));
         }
     ]);
@@ -154,7 +154,7 @@ function launchBot(server): void {
     intents.matches(/from michael|by michael/i, [
         (session) => {
             let latest: Post = getPost(PostType.Author, Author.Szul);
-            session.send('The latest from Michael on #codepunk is titled "%s" and was published on %s', latest.title, latest.pubdate);
+            session.send('The latest from Michael on #codepunk is titled "%s" and was published on %s', latest.title, latest.pubdate.toDateString());
             session.send(new builder.Message(session).addAttachment(createThumbnailCard(session, latest.title, latest.link, latest.image.url)));
         }
     ]);
@@ -162,7 +162,7 @@ function launchBot(server): void {
     intents.matches(/latest podcast|latest episode|newest podcast|newest episode/i, [
         (session) => {
             let latest: Post = getPost(PostType.Enclosure);
-            session.send('The latest podcast episode on #codepunk is titled "%s" and was published on %s', latest.title, latest.pubdate);
+            session.send('The latest podcast episode on #codepunk is titled "%s" and was published on %s', latest.title, latest.pubdate.toDateString());
             session.send(new builder.Message(session).addAttachment(createAudioCard(session, latest.title, latest.link, latest.enclosure.url, latest.image.url)));
         }
     ]);
@@ -170,7 +170,7 @@ function launchBot(server): void {
     intents.matches(/latest article|last article|latest blog post|last blog post|newest blog post|newest article/i, [ //You can make all of these more regex-y
         (session) => {
             let latest: Post = getPost(PostType.Article);
-            session.send('The latest blog post on #codepunk is titled "%s" and was published on %s', latest.title, latest.pubdate);
+            session.send('The latest blog post on #codepunk is titled "%s" and was published on %s', latest.title, latest.pubdate.toDateString());
             session.send(new builder.Message(session).addAttachment(createThumbnailCard(session, latest.title, latest.link, latest.image.url)));
         }
     ]);
@@ -179,7 +179,7 @@ function launchBot(server): void {
         (session) => {
             let latest: Post = Posts[0];
             let postType = (latest.enclosure == null) ? "an article" : "a podcast";
-            session.send('The latest on #codepunk is %s titled "%s" and was published on %s', postType, latest.title, latest.pubdate);
+            session.send('The latest on #codepunk is %s titled "%s" and was published on %s', postType, latest.title, latest.pubdate.toDateString());
             session.send(new builder.Message(session).addAttachment(createThumbnailCard(session, latest.title, latest.link, latest.image.url)));
         }
     ]);
@@ -203,7 +203,7 @@ function launchBot(server): void {
                 builder.Prompts.text(session, 'What may we call you?');
             }
             else {
-                session.send('Input not recognized user %s.', session.userData.name);
+                session.send('Input not recognized, %s.', session.userData.name);
             }
         },
         (session, results) => {
@@ -221,10 +221,7 @@ function createAudioCard(session: any, title: string, url: string, encUrl: strin
         .image(builder.CardImage.create(session, imageUrl))
         .media(<any>[
             { url: encUrl }
-        ])/*
-        .buttons([
-            builder.CardAction.openUrl(session, url, "Hear more...")
-        ])*/;
+        ]);
 }
 
 function createThumbnailCard(session: any, title: string, linkUrl: string, imageUrl: string): any {
