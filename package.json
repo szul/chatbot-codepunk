@@ -1,5 +1,5 @@
 {
-  "name": "codepunk.bot.node",
+  "name": "io.codepunk.bot",
   "version": "0.0.5",
   "description": "Experimental bot for codepunk.io",
   "main": "server.js",
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/szul/codepunk.bot.node.git"
+    "url": "https://github.com/codepunk-io/io.codepunk.bot.git"
   },
   "keywords": [
     "bots",
@@ -29,7 +29,7 @@
   "author": "Michael Szul <michael@szul.us>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/szul/codepunk.bot.node/issues"
+    "url": "https://github.com/codepunk-io/io.codepunk.bot/issues"
   },
-  "homepage": "https://github.com/szul/codepunk.bot.node"
+  "homepage": "https://github.com/codepunk-io/io.codepunk.bot"
 }
