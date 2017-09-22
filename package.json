@@ -5,12 +5,12 @@
   "main": "server.js",
   "dependencies": {
     "@types/request": "0.0.40",
-    "@types/restify": "^2.0.38",
-    "botbuilder": "^3.6.0",
+    "@types/restify": "^2.0.42",
+    "botbuilder": "^3.10.1",
     "feedparser": "^2.1.0",
     "request": "^2.80.0",
-    "restify": "^4.3.0",
-    "typescript": "^2.2.1"
+    "restify": "^4.3.1",
+    "typescript": "^2.3.2"
   },
   "devDependencies": {},
   "scripts": {
