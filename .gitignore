@@ -39,3 +39,4 @@ jspm_packages
 
 # Output files
 dist/app.js
+.env

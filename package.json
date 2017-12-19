@@ -4,13 +4,15 @@
   "description": "Experimental bot for codepunk.io",
   "main": "server.js",
   "dependencies": {
-    "@types/request": "0.0.40",
+    "@types/request": "0.0.45",
     "@types/restify": "^2.0.42",
     "botbuilder": "^3.10.1",
-    "feedparser": "^2.1.0",
-    "request": "^2.80.0",
+    "botbuilder-azure": "^3.0.4",
+    "dotenv-extended": "^2.0.1",
+    "feedparser": "^2.2.7",
+    "request": "^2.83.0",
     "restify": "^4.3.1",
-    "typescript": "^2.3.2"
+    "typescript": "^2.6.2"
   },
   "devDependencies": {},
   "scripts": {
