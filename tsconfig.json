@@ -1,15 +1,18 @@
 {
     "compileOnSave": true,
     "compilerOptions": {
-                "module": "commonjs", 
-                "target": "es5",
+                "module": "commonjs",
+                "target": "es6",
                 "sourceMap": false,
                 "declaration": false,
                 "removeComments": true,
                 "outDir": "./dist",
                 "allowJs": true
             },
-    "files": [
+    "exclude": [
+        "./node_modules"
+    ]
+    ,"files": [
         "./lib/app.ts"
     ]
 }

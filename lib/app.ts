@@ -1,8 +1,16 @@
 import * as restify from "restify";
 import * as builder from "botbuilder";
+//import * as azure from "botbuilder-azure";
 import * as request from "request";
 
+var azure = require("botbuilder-azure");
+require("dotenv-extended").load();
+
 const FEEDURL = "https://codepunk.io/rss/";
+
+const TABLENAME = process.env.TABLENAME;
+const STORAGENAME = process.env.STORAGENAME;
+const STORAGEKEY = process.env.STORAGEKEY;
 
 enum PostType {
      Article = 1
@@ -132,7 +140,9 @@ function launchBot(server): void {
         appId: process.env.MICROSOFT_APP_ID,
         appPassword: process.env.MICROSOFT_APP_PASSWORD
     });
-    var bot = new builder.UniversalBot(connector);
+    var tableClient = new azure.AzureTableClient(TABLENAME, STORAGENAME, STORAGEKEY);
+    var tableStorage = new azure.AzureBotStorage({ gzipData: false }, tableClient);
+    var bot = new builder.UniversalBot(connector).set("storage", tableStorage);
     server.post('/api/messages', connector.listen());
 
     var intents = new builder.IntentDialog();
