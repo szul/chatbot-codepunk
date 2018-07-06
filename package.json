@@ -6,13 +6,13 @@
   "dependencies": {
     "@types/request": "0.0.45",
     "@types/restify": "^2.0.42",
-    "botbuilder": "^3.10.1",
-    "botbuilder-azure": "^3.0.4",
-    "dotenv-extended": "^2.0.1",
-    "feedparser": "^2.2.7",
-    "request": "^2.83.0",
-    "restify": "^4.3.1",
-    "typescript": "^2.6.2"
+    "botbuilder": "^4.0.0-preview1.2",
+    "botbuilder-azure": "^3.1.0",
+    "dotenv-extended": "^2.0.2",
+    "feedparser": "^2.2.9",
+    "request": "^2.87.0",
+    "restify": "^4.3.4",
+    "typescript": "^2.9.2"
   },
   "devDependencies": {},
   "scripts": {
