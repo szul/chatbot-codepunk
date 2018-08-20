@@ -1,54 +1,23 @@
+import { BotFrameworkAdapter, ConversationState, UserState, BotStateSet, TurnContext } from "botbuilder";
+import { DialogSet, FoundChoice, ChoicePrompt } from "botbuilder-dialogs";
+import { TableStorage } from "botbuilder-azure";
+import { BotConfig } from "botbuilder-config";
+import { config } from "dotenv";
 import * as restify from "restify";
-import * as builder from "botbuilder";
-//import * as azure from "botbuilder-azure";
 import * as request from "request";
+import { Author, Enclosure, Image, Post, PostType } from "./types";
 
-var azure = require("botbuilder-azure");
-require("dotenv-extended").load();
+config();
 
-const FEEDURL = "https://codepunk.io/rss/";
+const feedparser = require("feedparser");
+const feed = request("https://codepunk.io/rss/");
+const parsed = new feedparser();
 
 const TABLENAME = process.env.TABLENAME;
 const STORAGENAME = process.env.STORAGENAME;
 const STORAGEKEY = process.env.STORAGEKEY;
 
-enum PostType {
-     Article = 1
-    ,Enclosure = 2
-    ,Author = 3
-}
-
-enum Author {
-     Ahern = 1
-    ,Szul = 2
-}
-
-interface Image {
-      url: string
-    , title?: string
-}
-
-interface Enclosure {
-      url: string
-    , type?: string
-    , length?: number
-}
-
-interface Post {
-      title: string
-    , description?: string
-    , summary?: string
-    , link: string
-    , pubdate: Date
-    , author: string
-    , image?: Image
-    , enclosure?: Enclosure
-}
-
-var Posts: Array<Post> = [];
-var feedparser = require('feedparser');
-var feed = request(FEEDURL);
-var parsed = new feedparser();
+var Posts: Post[] = [];
 
 feed.on("response", (resp) => {
     feed.pipe(parsed);
