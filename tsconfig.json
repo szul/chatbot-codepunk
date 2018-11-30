@@ -3,16 +3,20 @@
     "compilerOptions": {
                 "module": "commonjs",
                 "target": "es6",
-                "sourceMap": false,
+                "sourceMap": true,
                 "declaration": false,
                 "removeComments": true,
                 "outDir": "./dist",
                 "allowJs": true
             },
     "exclude": [
-        "./node_modules"
+        "/node_modules/"
     ]
     ,"files": [
+        "./lib/schema.ts",
+        "./lib/parser.ts",
+        "./lib/cards.ts",
+        "./lib/bot.ts",
         "./lib/app.ts"
     ]
 }

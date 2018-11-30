@@ -7,19 +7,21 @@
     "@types/feedparser": "^2.2.1",
     "@types/request": "0.0.45",
     "@types/restify": "^2.0.42",
-    "botbuilder": "^4.0.0-preview1.2",
-    "botbuilder-azure": "^4.0.0-preview1.2",
-    "botbuilder-config": "^0.4.0",
-    "botbuilder-dialogs": "^4.0.0-preview1.2",
+    "botbuilder": "^4.1.7",
+    "botbuilder-azure": "^4.1.7",
+    "botbuilder-azuretablestorage": "^0.1.1",
+    "botbuilder-config": "^0.5.1",
+    "botbuilder-dialogs": "^4.1.7",
     "dotenv": "^6.0.0",
     "feedparser": "^2.2.9",
     "request": "^2.88.0",
     "restify": "^4.3.4",
-    "typescript": "^2.9.2"
+    "typescript": "^3.2.1"
   },
   "devDependencies": {},
   "scripts": {
     "postinstall": "node_modules/.bin/tsc -p .",
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
