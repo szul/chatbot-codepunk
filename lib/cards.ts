@@ -1,15 +1,18 @@
 import { CardFactory, Attachment } from "botbuilder";
 
-export function createAudioCard(title: string, url: string, encUrl: string): Attachment {
+export function createAudioCard(title: string, summary: string, url: string, encUrl: string): Attachment {
     return CardFactory.audioCard(
         title,
         [
             { url: encUrl }
         ],
-        []);
+        [],
+        {
+            subtitle: summary
+        });
 }
 
-export function createThumbnailCard(title: string, linkUrl: string, imageUrl: string): Attachment {
+export function createThumbnailCard(title: string, summary: string, linkUrl: string, imageUrl: string): Attachment {
     return CardFactory.thumbnailCard(
         title,
         "",
@@ -23,6 +26,9 @@ export function createThumbnailCard(title: string, linkUrl: string, imageUrl: st
                 value: linkUrl.replace("http://", "https://"),
                 channelData: undefined
             }
-        ])
+        ]),
+        {
+            subtitle: summary
+        }
     );
 }

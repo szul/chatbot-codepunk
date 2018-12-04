@@ -1,5 +1,4 @@
 import { BotFrameworkAdapter, ConversationState } from "botbuilder";
-import { TableStorage } from "botbuilder-azuretablestorage";
 import { config } from "dotenv";
 import * as restify from "restify";
 import * as request from "request";
@@ -50,14 +49,6 @@ function launchChatbot(): void {
         appId: (process.env.ENV == "PROD") ? process.env.MICROSOFT_APP_ID  : ""
         , appPassword: (process.env.ENV == "PROD") ? process.env.MICROSOFT_APP_PASSWORD : ""
     });
-
-    const tableStorage = new TableStorage({ 
-        tableName: process.env.TABLENAME
-        , storageAccessKey: process.env.STORAGEKEY
-        , storageAccountOrConnectionString: process.env.STORAGENAME
-    });
-
-    const conversationState = new ConversationState(tableStorage);
 
     const rssBot: RSSBot = new RSSBot(Posts);
 
