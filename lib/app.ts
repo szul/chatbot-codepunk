@@ -1,4 +1,4 @@
-import { BotFrameworkAdapter, ConversationState } from "botbuilder";
+import { BotFrameworkAdapter } from "botbuilder";
 import { config } from "dotenv";
 import * as restify from "restify";
 import * as request from "request";
@@ -14,7 +14,7 @@ const parsed = new feedparser();
 
 const Posts: Post[] = [];
 
-feed.on("response", (resp) => {
+feed.on("response", () => {
     feed.pipe(parsed);
     launchChatbot();
 });
