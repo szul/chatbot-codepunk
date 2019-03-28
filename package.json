@@ -4,24 +4,21 @@
   "description": "Experimental bot for codepunk.io",
   "main": "server.js",
   "dependencies": {
-    "@types/feedparser": "^2.2.1",
-    "@types/request": "0.0.45",
-    "@types/restify": "^2.0.42",
-    "botbuilder": "^4.1.7",
-    "botbuilder-azure": "^4.1.7",
-    "botbuilder-azuretablestorage": "^0.1.1",
-    "botbuilder-config": "^0.5.1",
-    "botbuilder-dialogs": "^4.1.7",
+    "botbuilder": "^4.3.4",
     "dotenv": "^6.0.0",
     "feedparser": "^2.2.9",
     "request": "^2.88.0",
-    "restify": "^4.3.4",
-    "typescript": "^3.2.1"
+    "restify": "^4.3.4"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "typescript": "^3.3.4000",
+    "@types/feedparser": "^2.2.1",
+    "@types/request": "0.0.45",
+    "@types/restify": "^2.0.42"
+  },
   "scripts": {
-    "postinstall": "node_modules/.bin/tsc -p .",
-    "start": "node server.js",
+    "start": "node ./server.js",
+    "build": "tsc -p .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
